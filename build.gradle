@@ -6,6 +6,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
@@ -20,6 +21,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
     }
 }
 
@@ -30,9 +32,12 @@ task clean(type: Delete) {
 ext{
     // Build configuration
     buildToolsVersion = '27.0.3'
-    minSdkVersion = 15
+    minSdkVersion = 26
     compileSdkVersion = 27
     targetSdkVersion = 27
+
+    // social
+    kakaoSdkVersion = '1.11.0'
 
     // Library
     ankoVersion = '0.10.3'
@@ -48,4 +53,5 @@ ext{
     rxBindingVersion = '2.0.0'
     rxJavaVersion = '2.1.3'
     supportLibVersion = '27.0.2'
+
 }
