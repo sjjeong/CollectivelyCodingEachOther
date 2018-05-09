@@ -8,10 +8,11 @@ import io.reactivex.subjects.PublishSubject
  * Created by seokjunjeong on 2018. 5. 8..
  */
 class KakaoSessionCallback : ISessionCallback {
-    val loginEvent = PublishSubject.create<Boolean>()!!
+    val loginEvent = PublishSubject.create<Boolean>()
+    val errorEvent = PublishSubject.create<KakaoException>()
 
     override fun onSessionOpenFailed(exception: KakaoException?) {
-        loginEvent.onNext(false)
+        errorEvent.onNext(exception!!)
     }
 
     override fun onSessionOpened() {

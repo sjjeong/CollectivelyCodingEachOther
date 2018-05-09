@@ -1,6 +1,5 @@
 package com.googry.mogakko.ui.login
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -12,6 +11,7 @@ import com.googry.mogakko.ui.SampleActivity
 import com.googry.mogakko.util.KakaoSessionCallback
 import com.googry.zigzagchallenge.base.BaseFragment
 import com.kakao.auth.Session
+import io.reactivex.android.schedulers.AndroidSchedulers
 import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class LoginFragment @Inject constructor()
     : BaseFragment<LoginFragmentBinding>(R.layout.login_fragment) {
 
     @Inject
-    lateinit var loginViewModelFactory: LoginViewModelFactory
+    lateinit var loginViewModel: LoginViewModel
 
     @Inject
     lateinit var kakaoSessionCallback: KakaoSessionCallback
@@ -31,11 +31,22 @@ class LoginFragment @Inject constructor()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            vm = ViewModelProviders.of(this@LoginFragment, loginViewModelFactory)[LoginViewModel::class.java]
+            vm = loginViewModel
         }
         compositeDisposable.add(kakaoSessionCallback.loginEvent
-                .subscribe({ activity?.startActivity<SampleActivity>() }) {
-                    Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()
+                .filter { it }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    activity?.run {
+                        startActivity<SampleActivity>()
+                        activity?.finish()
+                    }
+                })
+        compositeDisposable.add(kakaoSessionCallback.errorEvent
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    it.printStackTrace()
+                    Toast.makeText(context, R.string.login_fail, Toast.LENGTH_SHORT).show()
                 })
         Session.getCurrentSession().run {
             addCallback(kakaoSessionCallback)
