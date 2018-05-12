@@ -18,7 +18,5 @@ class KakaoModule {
 
     @Provides
     @Singleton
-    fun provideKakaoSessionCallback() = KakaoSessionCallback(
-
-    )
+    fun provideKakaoSessionCallback() = KakaoSessionCallback()
 }

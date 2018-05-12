@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import com.googry.mogakko.R
 import com.googry.mogakko.databinding.LoginFragmentBinding
-import com.googry.mogakko.di.ActivityScoped
 import com.googry.mogakko.ui.SampleActivity
 import com.googry.mogakko.util.KakaoSessionCallback
 import com.googry.zigzagchallenge.base.BaseFragment
@@ -18,9 +17,13 @@ import javax.inject.Inject
 /**
  * Created by seokjunjeong on 2018. 5. 7..
  */
-@ActivityScoped
-class LoginFragment @Inject constructor()
-    : BaseFragment<LoginFragmentBinding>(R.layout.login_fragment) {
+class LoginFragment : BaseFragment<LoginFragmentBinding>(R.layout.login_fragment) {
+
+    companion object {
+        fun newInstance() = LoginFragment().apply {
+
+        }
+    }
 
     @Inject
     lateinit var loginViewModel: LoginViewModel

@@ -7,12 +7,15 @@ import com.googry.mogakko.ext.addFragment
 import dagger.android.support.DaggerAppCompatActivity
 
 abstract class BaseFragmentBindingActivity : DaggerAppCompatActivity() {
+    protected lateinit var fragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_fragment_binding_activity)
-        addFragment(getFragment())
+        fragment = createFragment().apply {
+            addFragment(this)
+        }
     }
 
-    abstract fun getFragment(): Fragment
+    abstract fun createFragment(): Fragment
 }
